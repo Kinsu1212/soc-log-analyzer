@@ -3,23 +3,30 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
-
+from .routes import register_routes
+from .extensions import db
+from . import models
 
 def create_app():
     load_dotenv()
 
     app = Flask(__name__)
 
-    # Basic config
-    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET", "dev-secret")
+    # DB config MUST be set before init_app
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///soclog.db")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Enable CORS
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "dev-secret")
     CORS(app, origins=os.getenv("CORS_ORIGIN", "http://localhost:3000"))
-
-    # Initialize JWT
     JWTManager(app)
 
-    # Simple health check route
+    register_routes(app)
+
     @app.route("/api/health")
     def health():
         return {"status": "ok"}, 200
