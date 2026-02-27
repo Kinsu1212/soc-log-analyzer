@@ -680,7 +680,18 @@ def upload_and_analyze():
     total_ips_observed = int(results.get("summary", {}).get("unique_ips", 0))
     flagged_ips = len(results.get("findings_by_ip", []))
 
-    results["ai_summary"] = f"{flagged_ips} flagged IP(s) out of {total_ips_observed} total IP(s)."
+    total_requests = int(results.get("summary", {}).get("total_requests", 0))
+    anoms_count = int(results.get("summary", {}).get("anomalies_count", 0))
+
+    high_ips = sum(1 for r in results.get("findings_by_ip", []) if r.get("max_severity") == "high")
+    med_ips = sum(1 for r in results.get("findings_by_ip", []) if r.get("max_severity") == "medium")
+    low_ips = sum(1 for r in results.get("findings_by_ip", []) if r.get("max_severity") == "low")
+
+    ai_lines = [
+        f"Processed {total_requests} requests from {total_ips_observed} unique IPs.",
+        f"Flagged {flagged_ips} IPs across {anoms_count} anomalies (high: {high_ips}, medium: {med_ips}, low: {low_ips}).",
+    ]
+    results["ai_summary"] = " ".join(ai_lines)
 
     upload = Upload(
         user_id=user_id,
