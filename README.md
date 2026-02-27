@@ -30,7 +30,7 @@ http://localhost:5001/api/health
 - Severity classification
 - Confidence scoring
 - Search + filter in report view
-- Optional AI executive summary (GROQ integration)
+- AI executive summary (GROQ integration)
 - Dockerized full stack with PostgreSQL
 
 ---
@@ -129,6 +129,34 @@ Optional:
 
 - GROQ_API_KEY
 - GROQ_MODEL
+
+### Enabling AI Executive Summary 
+
+The AI summary feature uses the GROQ API.
+
+To enable it:
+
+1. Copy the env template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Open `.env` (in the project root)
+
+3. Add your GROQ API key:
+
+   ```env
+   GROQ_API_KEY=your_actual_groq_key_here
+   ```
+
+4. Restart Docker:
+
+   ```bash
+   docker compose down
+   docker compose up -d
+   ```
+
+If `GROQ_API_KEY` is empty, the application will still run normally and use the rule-based executive summary.
 
 ---
 
