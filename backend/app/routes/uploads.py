@@ -300,15 +300,16 @@ def rewrite_high_severity_bullets_with_groq(findings_by_ip: list) -> list:
         )
 
         t0 = time.perf_counter()
-        resp = client.responses.create(
+        resp = client.chat.completions.create(
             model=os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
-            instructions=instructions,
-            input=json.dumps(high_rows),
-            max_output_tokens=900,
+            messages=[
+                {"role": "system", "content": instructions},
+                {"role": "user", "content": json.dumps(high_rows)},
+            ],
+            temperature=0,
+            max_tokens=900,
         )
-        _ = time.perf_counter() - t0
-
-        text = (resp.output_text or "").strip()
+        text = (resp.choices[0].message.content or "").strip()
         groq_json = json.loads(text)
 
         by_ip = {
