@@ -40,8 +40,8 @@ export default function LoginPage() {
     <div className="min-h-screen p-6 bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-center justify-center">
       <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-black/30 backdrop-blur p-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-semibold">Log in</h1>
-          <p className="mt-1 text-sm text-slate-400">SOC Log Analyzer</p>
+          <h1 className="text-2xl font-semibold">TENEX.AI</h1>
+          <p className="mt-1 text-sm text-slate-400">SOC Log Analyzer Tool</p>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-4">
