@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 import os
 from .routes import register_routes
 from .extensions import db
-from . import models
+from sqlalchemy import text
+from .routes.uploads import uploads_bp
 
 def create_app():
     load_dotenv()
@@ -13,10 +14,15 @@ def create_app():
     app = Flask(__name__)
 
     # DB config MUST be set before init_app
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///soclog.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL",
+    "sqlite:///" + os.path.join(app.instance_path, "soclog.db"))
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+
     db.init_app(app)
+
+    from . import models
 
     with app.app_context():
         db.create_all()

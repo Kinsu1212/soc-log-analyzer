@@ -20,3 +20,17 @@ class User(db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+    
+class Upload(db.Model):
+    __tablename__ = "uploads"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+
+    filename = db.Column(db.String(255), nullable=False)
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+    results_json = db.Column(db.JSON, nullable=False)
+
+    user = db.relationship("User", backref=db.backref("uploads", lazy=True))
