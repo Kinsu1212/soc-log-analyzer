@@ -171,7 +171,8 @@ If `GROQ_API_KEY` is empty, the application will still run normally and use the 
 
 ---
 
-# --- SOC Log Analyzer: Docker Quick Start (copy/paste) ---
+
+## Docker Quick Start
 
 # 1) Go to your repo folder (change this if needed)
 cd soc-log-analyzer
@@ -200,8 +201,8 @@ curl -s http://localhost:5001/api/health || true
 
 # 8) Reset DB (fresh start)
 # docker compose down -v
-
 ---
+
 
 ## Run Without Docker
 
