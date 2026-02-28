@@ -122,6 +122,38 @@ soc-log-analyzer/
 
 ---
 
+## Run With Docker
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+- A [Groq API Key](https://console.groq.com/).
+
+
+
+1. **Clone the repository:**
+
+   ```
+   git clone https://github.com/Kinsu1212/soc-log-analyzer
+   cd soc-log-analyzer
+   ```
+
+2. **Copy the environment variables template and fill it out:**
+
+   ```
+   cp .env.example .env
+   ```
+   Open .env (in the project root) and set your database credentials.
+
+
+3. **Start the application:**
+
+   ```
+   docker compose up -d --build
+   ```
+
+   You can now access the frontend at `http://localhost:3000` and the backend health check at `http://localhost:5001/api/health`.
+
 ## Environment Variables
 
 Create a `.env` file in the root by copying `.env.example`.
@@ -140,47 +172,6 @@ Optional:
 
 - GROQ_API_KEY
 - GROQ_MODEL
-
-## Run With Docker
-
-### Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
-- A [Groq API Key](https://console.groq.com/).
-
-
-
-1. **Clone the repository:**
-
-   ```
-   git clone (https://github.com/Kinsu1212/soc-log-analyzer)
-   cd soc-log-analyzer
-   ```
-
-2. **Copy the environment variables template and fill it out:**
-
-   ```
-   cp .env.example .env
-   ```
-   Open .env (in the project root) and set your database credentials.
-   You can choose any values for local development:
-
-   Then open `.env` in your editor and add values for `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc. If you have a GROQ API key, add it as well:
-
-   ```
-   GROQ_API_KEY=your_actual_groq_key_here
-   POSTGRES_USER=soc
-   POSTGRES_PASSWORD=socpass
-   POSTGRES_DB=soclog
-   ```
-
-3. **Start the application:**
-
-   ```
-   docker compose up -d --build
-   ```
-
-   You can now access the frontend at `http://localhost:3000` and the backend health check at `http://localhost:5001/api/health`.
    
 ## Run Without Docker
 
