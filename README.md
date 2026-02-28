@@ -141,69 +141,42 @@ Optional:
 - GROQ_API_KEY
 - GROQ_MODEL
 
-### Enabling AI Executive Summary 
+## Run With Docker
 
-The AI summary feature uses the GROQ API.
+### Prerequisites
 
-To enable it:
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+- A [Groq API Key](https://console.groq.com/).
 
-1. Copy the env template:
-   ```bash
+
+
+1. **Clone the repository:**
+
+   ```
+   git clone (https://github.com/Kinsu1212/soc-log-analyzer)
+   cd soc-log-analyzer
+   ```
+
+2. **Copy the environment variables template and fill it out:**
+
+   ```
    cp .env.example .env
    ```
 
-2. Open `.env` (in the project root)
+   Then open `.env` in your editor and add values for `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc. If you have a GROQ API key, add it as well:
 
-3. Add your GROQ API key:
-
-   ```env
+   ```
    GROQ_API_KEY=your_actual_groq_key_here
    ```
 
-4. Restart Docker:
+3. **Start the application:**
 
-   ```bash
-   docker compose down
-   docker compose up -d
+   ```
+   docker compose up -d --build
    ```
 
-If `GROQ_API_KEY` is empty, the application will still run normally and use the rule-based executive summary.
-
----
-
-
-## Docker Quick Start
-
-# 1) Go to your repo folder (change this if needed)
-cd soc-log-analyzer
-
-# 2) Create .env from template (safe if it already exists)
-[ -f .env ] || cp .env.example .env
-
-# 3) (Optional) Enable AI summary: set GROQ_API_KEY in .env
-#    If you do NOT want AI, skip this.
-#    This will open the file in terminal editor (nano). Save and exit when done.
-# nano .env
-
-# 4) Build + start everything
-docker compose up -d --build
-
-# 5) Quick health checks (should return OK / JSON)
-echo "Frontend: http://localhost:3000"
-echo "Backend health: http://localhost:5001/api/health"
-curl -s http://localhost:5001/api/health || true
-
-# 6) View logs (optional)
-# docker compose logs -f
-
-# 7) Stop (when done)
-# docker compose down
-
-# 8) Reset DB (fresh start)
-# docker compose down -v
----
-
-
+   You can now access the frontend at `http://localhost:3000` and the backend health check at `http://localhost:5001/api/health`.
+   
 ## Run Without Docker
 
 ### Backend
