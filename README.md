@@ -1,6 +1,6 @@
 # SOC Log Analyzer
 
-A full-stack SOC-style log triage application that ingests web server logs (Nginx / Apache style), runs a frozen rule-based anomaly detector, and generates an analyst-friendly report grouped by source IP.
+A full-stack SOC-style log triage application that ingests web server logs (Nginx / Apache style), runs a frozen rule-based anomaly detector, and generates an LLM based analyst-friendly report grouped by source IP.
 
 Designed as a take-home project:
 - Cloud deployable
@@ -10,7 +10,10 @@ Designed as a take-home project:
 - Clear demo workflow
 
 ---
-
+## Demo
+Live link:
+https://soc-log-analyzer.vercel.app/login
+---
 ## Demo (Local)
 
 Frontend:
@@ -35,15 +38,23 @@ http://localhost:5001/api/health
 
 ---
 
-## Detection Rules (Frozen)
+## Detection Rules
 
-The following rules are implemented and intentionally frozen:
+The following detection rules are implemented and intentionally frozen:
 
-- IP request burst detection
-- Minute-based burst detection
-- Repeated authentication failures
-- Severity tagging (low / medium / high)
-- Confidence scoring per anomaly
+- **IP request burst detection**: flags source IPs that generate an unusually high number of requests over the full log window.
+- **Minute-based burst detection**: flags IPs that exceed a high request count within a single minute (short spike behavior).
+- **Repeated authentication failures**: detects repeated failed login attempts from the same IP (brute-force style pattern).
+- **Suspicious path probing**: flags IPs that request multiple known sensitive endpoints (common recon / exploit probing).
+- **High server error rate (5xx spike)**: detects IPs triggering many server errors, indicating possible exploit attempts or unstable backend behavior.
+- **Excessive 404 responses**: flags IPs producing many not-found responses, often tied to scanning or forced browsing.
+- **High unique endpoint access**: detects IPs that hit an unusually large number of distinct paths (broad enumeration behavior).
+- **Endpoint-specific 5xx concentration**: flags repeated 5xx errors concentrated on the same endpoint, suggesting targeted abuse.
+
+Classification layer applied to each anomaly (not separate detection rules):
+
+- **Severity tagging**: assigns `low`, `medium`, or `high` based on rule type and intensity.
+- **Confidence scoring**: computes a deterministic confidence score per anomaly based on thresholds and supporting signals.
 
 No further expansion was done to keep scope controlled for the take-home.
 
@@ -83,7 +94,7 @@ DevOps:
 - Docker
 - Docker Compose
 
-Optional AI:
+AI:
 - GROQ API (env-driven, safe to disable)
 
 ---
@@ -160,27 +171,35 @@ If `GROQ_API_KEY` is empty, the application will still run normally and use the 
 
 ---
 
-## Run with Docker (Recommended)
+# --- SOC Log Analyzer: Docker Quick Start (copy/paste) ---
 
-From project root:
+# 1) Go to your repo folder (change this if needed)
+cd soc-log-analyzer
 
-```bash
-cp .env.example .env
+# 2) Create .env from template (safe if it already exists)
+[ -f .env ] || cp .env.example .env
+
+# 3) (Optional) Enable AI summary: set GROQ_API_KEY in .env
+#    If you do NOT want AI, skip this.
+#    This will open the file in terminal editor (nano). Save and exit when done.
+# nano .env
+
+# 4) Build + start everything
 docker compose up -d --build
-```
 
-Open:
-http://localhost:3000
+# 5) Quick health checks (should return OK / JSON)
+echo "Frontend: http://localhost:3000"
+echo "Backend health: http://localhost:5001/api/health"
+curl -s http://localhost:5001/api/health || true
 
-Stop:
-```bash
-docker compose down
-```
+# 6) View logs (optional)
+# docker compose logs -f
 
-Reset database (fresh start):
-```bash
-docker compose down -v
-```
+# 7) Stop (when done)
+# docker compose down
+
+# 8) Reset DB (fresh start)
+# docker compose down -v
 
 ---
 
