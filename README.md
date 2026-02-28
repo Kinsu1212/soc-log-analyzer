@@ -162,11 +162,16 @@ Optional:
    ```
    cp .env.example .env
    ```
+   Open .env (in the project root) and set your database credentials.
+   You can choose any values for local development:
 
    Then open `.env` in your editor and add values for `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc. If you have a GROQ API key, add it as well:
 
    ```
    GROQ_API_KEY=your_actual_groq_key_here
+   POSTGRES_USER=soc
+   POSTGRES_PASSWORD=socpass
+   POSTGRES_DB=soclog
    ```
 
 3. **Start the application:**
