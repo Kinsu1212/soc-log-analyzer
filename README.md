@@ -10,10 +10,6 @@ Designed as a take-home project:
 - Clear demo workflow
 
 ---
-## Demo
-Live link:
-https://soc-log-analyzer.vercel.app/login
----
 ## Demo (Local)
 
 Frontend:
